@@ -12,5 +12,6 @@ meeting-transcriber/.venv/
 meeting-transcriber/output/
 live-transcribe/node_modules/
 live-transcribe/dist/
+live-transcribe/.vite/
 **/__pycache__/
 *.pyc
