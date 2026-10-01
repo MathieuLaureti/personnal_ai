@@ -3,7 +3,7 @@ repo: MathieuLaureti/personnal_ai
 feature_slug: unify-meeting-transcription
 input_doc: docs/input/2026-10-01-unify-meeting-transcription.md
 delivery_mode: single
-phase: implementing
+phase: pr_open
 issues:
   - number: 4
     url: https://github.com/MathieuLaureti/personnal_ai/issues/4
