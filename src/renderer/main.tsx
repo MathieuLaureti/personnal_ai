@@ -1,0 +1,16 @@
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import { App } from './App'
+import { installHttpBridge } from './httpBridge'
+import './styles.css'
+
+installHttpBridge()
+
+const root = document.getElementById('root')
+if (!root) throw new Error('Missing #root')
+
+createRoot(root).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)

@@ -1,0 +1,64 @@
+{
+  "active": "gemma-4-26b",
+  "docsFolder": ".local/docs",
+  "models": {
+    "gemma-4-31b": {
+      "label": "Gemma 4 31B",
+      "provider": "gemini",
+      "id": "gemma-4-31b-it",
+      "thinking": true,
+      "envKey": "GEMINI_API_KEY"
+    },
+    "gemma-4-26b": {
+      "label": "Gemma 4 26B A4B",
+      "provider": "gemini",
+      "id": "gemma-4-26b-a4b-it",
+      "thinking": true,
+      "envKey": "GEMINI_API_KEY"
+    },
+    "gemini-2.5-flash-lite": {
+      "label": "Gemini 2.5 Flash-Lite",
+      "provider": "gemini",
+      "id": "gemini-2.5-flash-lite",
+      "thinking": true,
+      "envKey": "GEMINI_API_KEY"
+    },
+    "gemini-2.5-flash": {
+      "label": "Gemini 2.5 Flash",
+      "provider": "gemini",
+      "id": "gemini-2.5-flash",
+      "thinking": true,
+      "envKey": "GEMINI_API_KEY"
+    },
+    "gemini-2.5-pro": {
+      "label": "Gemini 2.5 Pro",
+      "provider": "gemini",
+      "id": "gemini-2.5-pro",
+      "thinking": true,
+      "envKey": "GEMINI_API_KEY"
+    },
+    "gemini-2.0-flash": {
+      "label": "Gemini 2.0 Flash",
+      "provider": "gemini",
+      "id": "gemini-2.0-flash",
+      "thinking": true,
+      "envKey": "GEMINI_API_KEY"
+    },
+    "openrouter-gemma-4-31b-free": {
+      "label": "Gemma 4 31B (OpenRouter free)",
+      "provider": "openai-compatible",
+      "id": "google/gemma-4-31b-it:free",
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "thinking": true,
+      "envKey": "OPENROUTER_API_KEY"
+    },
+    "openrouter-qwen3.8-27b-free": {
+      "label": "qwen3.8-27b (OpenRouter free)",
+      "provider": "openai-compatible",
+      "id": "qwen/qwen3.8-27b:free",
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "thinking": true,
+      "envKey": "OPENROUTER_API_KEY"
+    }
+  }
+}

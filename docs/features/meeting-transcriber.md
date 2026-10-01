@@ -19,11 +19,12 @@ The same LAN also exposes a **WhisperX HTTP API** (`http://192.168.2.99:11436`) 
 
 ## Scope
 
-- Runs on the machine with CUDA and `ffmpeg`; not wired into the Electron chat UI yet.
+- **Local GPU:** `meeting-transcriber/` on the CUDA host (`ffmpeg`, `HF_TOKEN`, sequential WhisperX + diarization).
+- **Desktop app:** Personnal AI **Meeting** tab invokes this CLI from the Electron main process (or `/api/meeting/transcribe` in `npm run ui`).
 - Does not store secrets in repository `/docs`.
-- Optional follow-up: call LAN WhisperX API from the Electron app via a backend proxy (CORS); optional Ollaya summarization of transcript text.
+- Optional follow-up: LAN WhisperX HTTP from the same Electron shell (proxy in main/Vite API); optional Ollama summarization of transcript text.
 
 ## Open questions
 
 - Whether to add a thin HTTP client mode that uses `WHISPERX_BASE_URL` instead of local WhisperX when `HF_TOKEN` is only on the server.
-- GitHub issue + PR enrollment for shipping this subtree on `main` — issue #1, branch `feature/meeting-transcriber`.
+- Config for Python venv path and “GPU host only” vs “run CLI on this laptop.”

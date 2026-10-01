@@ -1,26 +1,23 @@
 # Live transcribe web app
 
 ## Status
-building
+retired
 
 ## Intent
 
 Web UI reachable from phone on LAN: toggle mic, optional desktop/system audio on PC, live-ish transcription as a chat with Person 1/2/3… in different colors.
 
-## Behavior
+## Decision
 
-- App path: [`live-transcribe/`](../../live-transcribe/README.md)
-- Vite dev server on `0.0.0.0:5174`; proxies `/api/transcribe` and `/api/health` to `WHISPERX_BASE_URL` (no browser CORS to WhisperX).
-- ~8 second audio chunks via `MediaRecorder`; requests serialized to match WhisperX single-GPU lock.
-- Speaker labels from diarization map to stable **Person N** colors; without server diarization, speech tends to show as Person 1.
-- Desktop audio: `getDisplayMedia` + system audio checkbox (PC browsers only). Default: mic only.
+**Superseded.** The same product direction is handled inside **Personnal AI** with **`meeting-transcriber/`** as the backend—not a standalone `live-transcribe/` app.
+
+See [decisions/2026-10-01-unify-transcription-in-desktop-app.md](../decisions/2026-10-01-unify-transcription-in-desktop-app.md) and [input/2026-10-01-unify-meeting-transcription.md](../input/2026-10-01-unify-meeting-transcription.md).
+
+## Historical behavior (removed)
+
+- Was at `live-transcribe/` (deleted in unification batch).
+- Vite on `0.0.0.0:5174`; proxied `/api/transcribe` to `WHISPERX_BASE_URL`.
 
 ## Scope
 
-- Does not replace Electron chat; standalone tool.
-- Real-time streaming STT not in scope (batch chunks only).
-
-## Open questions
-
-- Separate GitHub issue/PR from meeting-transcriber CLI slice.
-- Enable server diarization (`HF_TOKEN`) for meaningful multi-person colors.
+Was standalone; no longer maintained.

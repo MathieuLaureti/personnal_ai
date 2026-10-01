@@ -17,14 +17,21 @@ Switch models from the header list, or by editing `"active"` in [`config/models.
 
 On WSL, Electron needs system libraries (`libnss3`, GTK, etc.). `npm run dev` is the desktop shell; `npm run ui` is the same chat through a local `/api/chat`.
 
-## Docs
-
-Product decisions, features, and ideas live in [`docs/`](docs/README.md). Project chats are expected to keep that folder current.
+Use **Node.js 20.12+** (22 LTS recommended). If `npm install` fails on peer deps with Vite 8, run `npm install --legacy-peer-deps`.
 
 ## Meeting transcription (GPU)
 
-Local WhisperX + diarization CLI lives in [`meeting-transcriber/`](meeting-transcriber/README.md). For LAN HTTP STT from other devices, see [docs/features/meeting-transcriber.md](docs/features/meeting-transcriber.md).
+Batch WhisperX + diarization runs from the **Meeting** tab in the app (Electron or `npm run ui`). The Python CLI lives in [`meeting-transcriber/`](meeting-transcriber/README.md):
 
-## Live transcribe (web, phone-friendly)
+```bash
+cd meeting-transcriber
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env   # HF_TOKEN for Pyannote
+```
 
-Mic + optional desktop audio → chat-style transcript on the LAN: [`live-transcribe/`](live-transcribe/README.md) — `npm run live-transcribe` from repo root.
+Optional root `.env`: `MEETING_TRANSCRIBER_PYTHON`, `MEETING_TRANSCRIBER_DIR`. LAN HTTP STT is documented in [docs/features/meeting-transcriber.md](docs/features/meeting-transcriber.md).
+
+## Docs
+
+Product decisions, features, and ideas live in [`docs/`](docs/README.md). Project chats are expected to keep that folder current.

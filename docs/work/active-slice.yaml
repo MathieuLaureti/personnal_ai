@@ -1,20 +1,20 @@
 version: 2
 repo: MathieuLaureti/personnal_ai
-feature_slug: meeting-transcriber
-input_doc: docs/input/2026-10-01-meeting-transcriber-cli.md
+feature_slug: unify-meeting-transcription
+input_doc: docs/input/2026-10-01-unify-meeting-transcription.md
 delivery_mode: single
-phase: pr_open
+phase: implementing
 issues:
-  - number: 1
-    url: https://github.com/MathieuLaureti/personnal_ai/issues/1
-    title: "[tools] Add meeting-transcriber GPU CLI (WhisperX + diarization)"
+  - number: 4
+    url: https://github.com/MathieuLaureti/personnal_ai/issues/4
+    title: "[app] Unify meeting transcription in Personnal AI (remove live-transcribe)"
 branch: feature/meeting-transcriber
 pr:
   number: 2
   url: https://github.com/MathieuLaureti/personnal_ai/pull/2
   state: open
-delivery_report: docs/delivery/feature-meeting-transcriber.md
+delivery_report: docs/delivery/feature-unify-meeting-transcription.md
 labels:
   managed: agent-managed
-updated_at: "2026-10-01T15:10:00Z"
-updated_by: documenter
+updated_at: "2026-10-01T15:35:00Z"
+updated_by: orchestrator
