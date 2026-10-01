@@ -24,3 +24,7 @@ Product decisions, features, and ideas live in [`docs/`](docs/README.md). Projec
 ## Meeting transcription (GPU)
 
 Local WhisperX + diarization CLI lives in [`meeting-transcriber/`](meeting-transcriber/README.md). For LAN HTTP STT from other devices, see [docs/features/meeting-transcriber.md](docs/features/meeting-transcriber.md).
+
+## Live transcribe (web, phone-friendly)
+
+Mic + optional desktop audio → chat-style transcript on the LAN: [`live-transcribe/`](live-transcribe/README.md) — `npm run live-transcribe` from repo root.

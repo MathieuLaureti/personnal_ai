@@ -17,6 +17,7 @@ Chats in this repository must leave a trace here. The Cursor skill `.cursor/skil
 | [features/document-skills.md](features/document-skills.md) | Extension → parser skill lookup |
 | [features/custom-user-query.md](features/custom-user-query.md) | JSON-driven ask-user UI (skills, connectors, not Plan-only) |
 | [features/meeting-transcriber.md](features/meeting-transcriber.md) | GPU CLI: WhisperX + diarization; LAN API alternative |
+| [features/live-transcribe-web.md](features/live-transcribe-web.md) | LAN web UI: mic/desktop capture + chat transcript |
 | [ideas/2026-09-24-initial-brief.md](ideas/2026-09-24-initial-brief.md) | First-chat brief and parked ideas |
 | [ideas/2026-09-24-config-checker.md](ideas/2026-09-24-config-checker.md) | Auto-test catalog models with a tiny prompt |
 | [ideas/2026-09-26-cursor-alternative-openrouter.md](ideas/2026-09-26-cursor-alternative-openrouter.md) | Own agent + OpenRouter without Cursor subscription |
