@@ -116,8 +116,14 @@ export function LiveMeetingPanel() {
         desktopAvailable={desktopAvailable}
         listening={listening}
         busy={busy}
-        onMicChange={setMicEnabled}
-        onDesktopChange={setDesktopEnabled}
+        onMicChange={(value) => {
+          setMicEnabled(value)
+          if (value && desktopEnabled) setDesktopEnabled(false)
+        }}
+        onDesktopChange={(value) => {
+          setDesktopEnabled(value)
+          if (value && micEnabled) setMicEnabled(false)
+        }}
         onToggleListen={toggleListen}
         onClear={clearChat}
       />

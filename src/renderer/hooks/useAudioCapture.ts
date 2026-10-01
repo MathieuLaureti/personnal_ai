@@ -136,6 +136,7 @@ export function useAudioCapture(options: Options) {
   const audioContextRef = useRef<AudioContext | null>(null)
   const listeningRef = useRef(false)
   const chunkTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const rotatingRef = useRef(false)
   const onChunkRef = useRef(onChunk)
   onChunkRef.current = onChunk
 
@@ -152,18 +153,36 @@ export function useAudioCapture(options: Options) {
 
     const recorder = createMediaRecorder(stream)
     recorderRef.current = recorder
-    recorder.ondataavailable = (event) => {
-      if (event.data.size > 800) onChunkRef.current(event.data)
-    }
     recorder.onerror = () => onError('MediaRecorder error while capturing audio.')
-    recorder.onstop = () => {
-      if (listeningRef.current && recordStreamRef.current) {
-        beginSegment()
-      }
-    }
-    // Full WebM with EBML header — do not use start(timeslice) partial chunks.
     recorder.start()
   }, [onError])
+
+  const rotateSegment = useCallback(async () => {
+    if (!listeningRef.current || rotatingRef.current) return
+    const recorder = recorderRef.current
+    if (!recorder || recorder.state !== 'recording') return
+
+    rotatingRef.current = true
+    try {
+      await new Promise<void>((resolve) => {
+        let settled = false
+        const finish = () => {
+          if (settled) return
+          settled = true
+          resolve()
+        }
+        recorder.ondataavailable = (event) => {
+          if (event.data.size > 800) onChunkRef.current(event.data)
+          finish()
+        }
+        recorder.onstop = () => finish()
+        recorder.stop()
+      })
+      if (listeningRef.current) beginSegment()
+    } finally {
+      rotatingRef.current = false
+    }
+  }, [beginSegment])
 
   const cleanup = useCallback(() => {
     listeningRef.current = false
@@ -234,10 +253,7 @@ export function useAudioCapture(options: Options) {
       listeningRef.current = true
       beginSegment()
       chunkTimerRef.current = setInterval(() => {
-        const recorder = recorderRef.current
-        if (recorder && recorder.state === 'recording') {
-          recorder.stop()
-        }
+        void rotateSegment()
       }, chunkMs)
       setStatus('listening')
       onError(null)
@@ -246,7 +262,7 @@ export function useAudioCapture(options: Options) {
       onError(friendlyCaptureError(err))
       setStatus('error')
     }
-  }, [beginSegment, chunkMs, cleanup, desktopEnabled, micEnabled, onError])
+  }, [beginSegment, chunkMs, cleanup, desktopEnabled, micEnabled, onError, rotateSegment])
 
   useEffect(() => () => cleanup(), [cleanup])
 

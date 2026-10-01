@@ -48,6 +48,7 @@ export function LiveMeetingControls({
             Desktop audio needs Chromium on desktop (Chrome, Edge, or Electron). Share entire screen with system audio.
           </span>
         )}
+        <span className="toggle-hint">Use microphone or desktop audio, not both — avoids duplicate transcription.</span>
       </div>
       <div className="live-meeting-control-actions">
         <button
