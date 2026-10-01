@@ -1,0 +1,20 @@
+version: 2
+repo: MathieuLaureti/personnal_ai
+feature_slug: meeting-transcriber
+input_doc: docs/input/2026-10-01-meeting-transcriber-cli.md
+delivery_mode: single
+phase: implementing
+issues:
+  - number: 1
+    url: https://github.com/MathieuLaureti/personnal_ai/issues/1
+    title: "[tools] Add meeting-transcriber GPU CLI (WhisperX + diarization)"
+branch: feature/meeting-transcriber
+pr:
+  number: null
+  url: ""
+  state: ""
+delivery_report: docs/delivery/feature-meeting-transcriber.md
+labels:
+  managed: agent-managed
+updated_at: "2026-10-01T15:05:00Z"
+updated_by: orchestrator
