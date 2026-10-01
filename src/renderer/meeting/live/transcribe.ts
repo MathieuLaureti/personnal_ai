@@ -1,21 +1,35 @@
 import { SpeakerRegistry, formatClock } from './speakers'
 import type { LiveTranscriptMessage, VerboseTranscription, WhisperSegment } from './types'
 
+function parseErrorMessage(raw: string, status: number): string {
+  const trimmed = raw.trim()
+  if (!trimmed) return `Transcribe failed (${status}).`
+  try {
+    const parsed = JSON.parse(trimmed) as { error?: string; message?: string; detail?: string }
+    return parsed.error || parsed.message || parsed.detail || trimmed
+  } catch {
+    return trimmed
+  }
+}
+
 export async function transcribeBlob(
   blob: Blob,
-  options: { diarize: boolean; language?: string }
+  options: { diarize: boolean; language?: string; model?: string }
 ): Promise<VerboseTranscription> {
-  const form = new FormData()
-  form.append('file', blob, `chunk-${Date.now()}.webm`)
-  form.append('model', 'large-v3')
-  form.append('response_format', 'verbose_json')
-  if (options.language) form.append('language', options.language)
-  if (options.diarize) form.append('diarize', 'true')
-
-  const res = await fetch('/api/transcribe', { method: 'POST', body: form })
+  const model = options.model?.trim() || 'large-v3'
+  const body = await blob.arrayBuffer()
+  const res = await fetch('/api/transcribe', {
+    method: 'POST',
+    headers: {
+      'Content-Type': blob.type || 'audio/webm',
+      'X-Whisper-Model': model,
+      ...(options.diarize ? { 'X-Whisper-Diarize': 'true' } : {})
+    },
+    body
+  })
   if (!res.ok) {
     const err = await res.text()
-    throw new Error(err || `Transcribe failed (${res.status})`)
+    throw new Error(parseErrorMessage(err, res.status))
   }
   return (await res.json()) as VerboseTranscription
 }

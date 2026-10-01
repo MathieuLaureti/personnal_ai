@@ -21,6 +21,11 @@ export function chatApiPlugin(): Plugin {
           return
         }
 
+        if (url === '/api/health' || url === '/api/transcribe') {
+          next()
+          return
+        }
+
         try {
           if (req.method === 'GET' && url === '/api/runtime') {
             json(res, 200, resolveRuntime().info)

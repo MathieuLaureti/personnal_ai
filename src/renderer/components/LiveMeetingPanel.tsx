@@ -52,7 +52,8 @@ export function LiveMeetingPanel() {
           setBusy(true)
           setError(null)
           const result = await transcribeBlob(blob, {
-            diarize: health?.diarize_available === true
+            diarize: health?.diarize_available === true,
+            model: health?.model
           })
           const segments = result.segments ?? []
           if (segments.length === 0 && result.text?.trim()) {
