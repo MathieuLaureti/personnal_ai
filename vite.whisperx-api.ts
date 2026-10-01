@@ -106,9 +106,13 @@ export function whisperxApiPlugin(mode = 'development'): Plugin {
             const model =
               typeof modelHeader === 'string' && modelHeader.trim() ? modelHeader.trim() : 'large-v3'
             const diarize = req.headers['x-whisper-diarize'] === 'true'
+            const langHeader = req.headers['x-whisper-language']
+            const rawLang = typeof langHeader === 'string' ? langHeader.trim().toLowerCase() : ''
+            const language = rawLang === 'fr' ? 'fr' : 'en'
             const fields: Record<string, string> = {
               model,
-              response_format: 'verbose_json'
+              response_format: 'verbose_json',
+              language
             }
             if (diarize) fields.diarize = 'true'
 

@@ -1,6 +1,8 @@
 import { SpeakerRegistry, formatClock } from './speakers'
 import type { LiveTranscriptMessage, VerboseTranscription, WhisperSegment } from './types'
 
+import type { TranscriptionLanguage } from './types'
+
 function parseErrorMessage(raw: string, status: number): string {
   const trimmed = raw.trim()
   if (!trimmed) return `Transcribe failed (${status}).`
@@ -14,7 +16,7 @@ function parseErrorMessage(raw: string, status: number): string {
 
 export async function transcribeBlob(
   blob: Blob,
-  options: { diarize: boolean; language?: string; model?: string }
+  options: { diarize: boolean; language: TranscriptionLanguage; model?: string }
 ): Promise<VerboseTranscription> {
   const model = options.model?.trim() || 'large-v3'
   const body = await blob.arrayBuffer()
@@ -23,6 +25,7 @@ export async function transcribeBlob(
     headers: {
       'Content-Type': blob.type || 'audio/webm',
       'X-Whisper-Model': model,
+      'X-Whisper-Language': options.language,
       ...(options.diarize ? { 'X-Whisper-Diarize': 'true' } : {})
     },
     body

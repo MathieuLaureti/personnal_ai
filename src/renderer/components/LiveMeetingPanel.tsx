@@ -4,13 +4,14 @@ import { LiveMeetingTranscript } from './LiveMeetingTranscript'
 import { useAudioCapture, useDesktopCaptureAvailable } from '../hooks/useAudioCapture'
 import { SpeakerRegistry } from '../meeting/live/speakers'
 import { mergeLiveMessages, segmentsToMessages, transcribeBlob } from '../meeting/live/transcribe'
-import type { LiveTranscriptMessage, ServerHealth } from '../meeting/live/types'
+import type { LiveTranscriptMessage, ServerHealth, TranscriptionLanguage } from '../meeting/live/types'
 
 const CHUNK_MS = 8000
 
 export function LiveMeetingPanel() {
   const [micEnabled, setMicEnabled] = useState(true)
   const [desktopEnabled, setDesktopEnabled] = useState(false)
+  const [language, setLanguage] = useState<TranscriptionLanguage>('en')
   const [messages, setMessages] = useState<LiveTranscriptMessage[]>([])
   const [health, setHealth] = useState<ServerHealth | null>(null)
   const [statusLine, setStatusLine] = useState('Checking WhisperX…')
@@ -53,7 +54,8 @@ export function LiveMeetingPanel() {
           setError(null)
           const result = await transcribeBlob(blob, {
             diarize: health?.diarize_available === true,
-            model: health?.model
+            model: health?.model,
+            language
           })
           const segments = result.segments ?? []
           if (segments.length === 0 && result.text?.trim()) {
@@ -72,7 +74,7 @@ export function LiveMeetingPanel() {
         })
         .finally(() => setBusy(false))
     },
-    [health?.diarize_available]
+    [health?.diarize_available, health?.model, language]
   )
 
   const { status, start, stop } = useAudioCapture({
@@ -114,8 +116,10 @@ export function LiveMeetingPanel() {
         micEnabled={micEnabled}
         desktopEnabled={desktopEnabled}
         desktopAvailable={desktopAvailable}
+        language={language}
         listening={listening}
         busy={busy}
+        onLanguageChange={setLanguage}
         onMicChange={(value) => {
           setMicEnabled(value)
           if (value && desktopEnabled) setDesktopEnabled(false)

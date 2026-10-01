@@ -20,7 +20,7 @@ The same LAN also exposes a **WhisperX HTTP API** (`http://192.168.2.99:11436`) 
 ## Scope
 
 - **Local GPU:** `meeting-transcriber/` on the CUDA host (`ffmpeg`, `HF_TOKEN`, sequential WhisperX + diarization).
-- **Desktop app:** Personnal AI **Meeting** tab — **Live** (mic ± desktop audio → LAN WhisperX, chat-style Person 1/2/3 colors) and **Batch file** (local `meeting-transcriber` CLI).
+- **Desktop app:** Personnal AI **Meeting** tab — **Live** (mic ± desktop audio → LAN WhisperX, chat-style Person 1/2/3 colors; **language** `en` or `fr` in UI) and **Batch file** (local `meeting-transcriber` CLI).
 - Does not store secrets in repository `/docs`.
 - Optional follow-up: LAN WhisperX HTTP from the same Electron shell (proxy in main/Vite API); optional Ollama summarization of transcript text.
 

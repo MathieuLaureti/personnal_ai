@@ -23,3 +23,6 @@ export interface ServerHealth {
   model?: string
   diarize_available?: boolean
 }
+
+/** WhisperX `language` form field (ISO 639-1). */
+export type TranscriptionLanguage = 'en' | 'fr'
