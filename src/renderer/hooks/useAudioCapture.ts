@@ -132,15 +132,47 @@ export function useAudioCapture(options: Options) {
   const [status, setStatus] = useState<CaptureStatus>('idle')
   const recorderRef = useRef<MediaRecorder | null>(null)
   const streamsRef = useRef<MediaStream[]>([])
+  const recordStreamRef = useRef<MediaStream | null>(null)
   const audioContextRef = useRef<AudioContext | null>(null)
+  const listeningRef = useRef(false)
+  const chunkTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const onChunkRef = useRef(onChunk)
   onChunkRef.current = onChunk
 
+  const clearChunkTimer = useCallback(() => {
+    if (chunkTimerRef.current) {
+      clearInterval(chunkTimerRef.current)
+      chunkTimerRef.current = null
+    }
+  }, [])
+
+  const beginSegment = useCallback(() => {
+    const stream = recordStreamRef.current
+    if (!stream || !listeningRef.current) return
+
+    const recorder = createMediaRecorder(stream)
+    recorderRef.current = recorder
+    recorder.ondataavailable = (event) => {
+      if (event.data.size > 800) onChunkRef.current(event.data)
+    }
+    recorder.onerror = () => onError('MediaRecorder error while capturing audio.')
+    recorder.onstop = () => {
+      if (listeningRef.current && recordStreamRef.current) {
+        beginSegment()
+      }
+    }
+    // Full WebM with EBML header — do not use start(timeslice) partial chunks.
+    recorder.start()
+  }, [onError])
+
   const cleanup = useCallback(() => {
+    listeningRef.current = false
+    clearChunkTimer()
     if (recorderRef.current && recorderRef.current.state !== 'inactive') {
       recorderRef.current.stop()
     }
     recorderRef.current = null
+    recordStreamRef.current = null
     for (const s of streamsRef.current) {
       s.getTracks().forEach((t) => t.stop())
     }
@@ -148,7 +180,7 @@ export function useAudioCapture(options: Options) {
     detachDisplayPreview()
     void audioContextRef.current?.close()
     audioContextRef.current = null
-  }, [])
+  }, [clearChunkTimer])
 
   const stop = useCallback(() => {
     cleanup()
@@ -198,13 +230,15 @@ export function useAudioCapture(options: Options) {
 
       await audioContextRef.current?.resume()
 
-      const recorder = createMediaRecorder(recordStream)
-      recorderRef.current = recorder
-      recorder.ondataavailable = (ev) => {
-        if (ev.data.size > 800) onChunkRef.current(ev.data)
-      }
-      recorder.onerror = () => onError('MediaRecorder error while capturing audio.')
-      recorder.start(chunkMs)
+      recordStreamRef.current = recordStream
+      listeningRef.current = true
+      beginSegment()
+      chunkTimerRef.current = setInterval(() => {
+        const recorder = recorderRef.current
+        if (recorder && recorder.state === 'recording') {
+          recorder.stop()
+        }
+      }, chunkMs)
       setStatus('listening')
       onError(null)
     } catch (err) {
@@ -212,7 +246,7 @@ export function useAudioCapture(options: Options) {
       onError(friendlyCaptureError(err))
       setStatus('error')
     }
-  }, [chunkMs, cleanup, desktopEnabled, micEnabled, onError])
+  }, [beginSegment, chunkMs, cleanup, desktopEnabled, micEnabled, onError])
 
   useEffect(() => () => cleanup(), [cleanup])
 
