@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import type { MeetingTranscribeResult } from '@shared/types'
+import { LiveMeetingPanel } from './LiveMeetingPanel'
 
 type Props = {
   disabled?: boolean
 }
 
+type MeetingMode = 'live' | 'batch'
+
 export function MeetingPanel({ disabled }: Props) {
+  const [mode, setMode] = useState<MeetingMode>('live')
   const [audioPath, setAudioPath] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [logs, setLogs] = useState<string[]>([])
@@ -91,63 +95,85 @@ export function MeetingPanel({ disabled }: Props) {
 
   return (
     <div className="meeting-panel">
-      <input
-        ref={fileRef}
-        type="file"
-        accept="audio/*,video/mp4,video/webm"
-        hidden
-        onChange={(event) => {
-          const file = event.target.files?.[0] ?? null
-          void onHttpFileChange(file)
-          event.target.value = ''
-        }}
-      />
-
-      <div className="meeting-intro">
-        <h2>Meeting transcription</h2>
-        <p>
-          Batch WhisperX + diarization via <code>meeting-transcriber/</code> on this machine. Set up Python, CUDA, and{' '}
-          <code>HF_TOKEN</code> in <code>meeting-transcriber/.env</code> (optional{' '}
-          <code>MEETING_TRANSCRIBER_PYTHON</code> in root <code>.env</code>).
-        </p>
-      </div>
-
-      <div className="meeting-actions">
-        <button className="btn" type="button" disabled={disabled || busy} onClick={() => void pickFile()}>
-          {httpMode ? 'Upload audio' : 'Choose audio file'}
+      <div className="meeting-mode-tabs">
+        <button
+          type="button"
+          className={`btn ghost ${mode === 'live' ? 'active' : ''}`}
+          onClick={() => setMode('live')}
+        >
+          Live
         </button>
-        {!httpMode ? (
-          <button
-            className="btn primary"
-            type="button"
-            disabled={disabled || busy || !audioPath}
-            onClick={() => void transcribe()}
-          >
-            {busy ? 'Transcribing…' : 'Transcribe'}
-          </button>
-        ) : null}
+        <button
+          type="button"
+          className={`btn ghost ${mode === 'batch' ? 'active' : ''}`}
+          onClick={() => setMode('batch')}
+        >
+          Batch file
+        </button>
       </div>
 
-      {audioPath ? (
-        <p className="meeting-path">
-          <span className="muted">File:</span> {audioPath}
-        </p>
-      ) : null}
+      {mode === 'live' ? (
+        <LiveMeetingPanel />
+      ) : (
+        <>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="audio/*,video/mp4,video/webm"
+            hidden
+            onChange={(event) => {
+              const file = event.target.files?.[0] ?? null
+              void onHttpFileChange(file)
+              event.target.value = ''
+            }}
+          />
 
-      {error ? <div className="callout danger">{error}</div> : null}
+          <div className="meeting-intro">
+            <h2>Batch transcription</h2>
+            <p>
+              Full WhisperX + diarization via <code>meeting-transcriber/</code> on this machine (Python, CUDA,{' '}
+              <code>HF_TOKEN</code> in <code>meeting-transcriber/.env</code>).
+            </p>
+          </div>
 
-      {logs.length > 0 ? (
-        <pre className="meeting-log" aria-live="polite">
-          {logs.join('\n')}
-        </pre>
-      ) : null}
+          <div className="meeting-actions">
+            <button className="btn" type="button" disabled={disabled || busy} onClick={() => void pickFile()}>
+              {httpMode ? 'Upload audio' : 'Choose audio file'}
+            </button>
+            {!httpMode ? (
+              <button
+                className="btn primary"
+                type="button"
+                disabled={disabled || busy || !audioPath}
+                onClick={() => void transcribe()}
+              >
+                {busy ? 'Transcribing…' : 'Transcribe'}
+              </button>
+            ) : null}
+          </div>
 
-      {result ? (
-        <section className="meeting-result">
-          <h3>Transcript</h3>
-          <pre>{result.plaintext}</pre>
-        </section>
-      ) : null}
+          {audioPath ? (
+            <p className="meeting-path">
+              <span className="muted">File:</span> {audioPath}
+            </p>
+          ) : null}
+
+          {error ? <div className="callout danger">{error}</div> : null}
+
+          {logs.length > 0 ? (
+            <pre className="meeting-log" aria-live="polite">
+              {logs.join('\n')}
+            </pre>
+          ) : null}
+
+          {result ? (
+            <section className="meeting-result">
+              <h3>Transcript</h3>
+              <pre>{result.plaintext}</pre>
+            </section>
+          ) : null}
+        </>
+      )}
     </div>
   )
 }

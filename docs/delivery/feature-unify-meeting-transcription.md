@@ -15,8 +15,8 @@ open
 ## Test plan
 - [x] `npm run typecheck`
 - [x] `PYTHONPATH=. python3 -m unittest discover -s tests` in `meeting-transcriber/`
-- [ ] Manual: Meeting tab with GPU host + `HF_TOKEN` (CUDA)
-- [ ] Manual: `npm run ui` upload audio on WSL
+- [ ] Manual: Meeting → **Live** with `WHISPERX_BASE_URL` in `.env`
+- [ ] Manual: Meeting → **Batch file** with GPU host + `HF_TOKEN` (CUDA)
 
 ## PR
 https://github.com/MathieuLaureti/personnal_ai/pull/2

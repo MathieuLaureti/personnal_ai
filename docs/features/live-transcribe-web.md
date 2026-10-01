@@ -3,7 +3,8 @@
 ## Status
 retired
 
-## Intent
+## Note
+Live mic/desktop capture and colored chat transcript moved into Personnal AI **Meeting → Live**. This standalone app path is not used anymore.
 
 Web UI reachable from phone on LAN: toggle mic, optional desktop/system audio on PC, live-ish transcription as a chat with Person 1/2/3… in different colors.
 

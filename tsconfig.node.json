@@ -20,6 +20,7 @@
     "electron.vite.config.ts",
     "vite.renderer.config.ts",
     "vite.chat-api.ts",
+    "vite.whisperx-api.ts",
     "src/main/**/*.ts",
     "src/preload/**/*.ts",
     "src/shared/**/*.ts"

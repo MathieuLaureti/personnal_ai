@@ -21,7 +21,7 @@ Use **Node.js 20.12+** (22 LTS recommended). If `npm install` fails on peer deps
 
 ## Meeting transcription (GPU)
 
-Batch WhisperX + diarization runs from the **Meeting** tab in the app (Electron or `npm run ui`). The Python CLI lives in [`meeting-transcriber/`](meeting-transcriber/README.md):
+Batch WhisperX + diarization runs from the **Meeting** tab (**Batch file**). **Live** streams mic ± desktop audio to WhisperX (`WHISPERX_BASE_URL` in `.env`):
 
 ```bash
 cd meeting-transcriber
