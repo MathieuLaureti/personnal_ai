@@ -14,4 +14,4 @@ Python CLI for WhisperX + Pyannote meeting transcription on the GPU host.
 - [ ] Manual smoke on GPU host with sample `.wav` and valid `HF_TOKEN`
 
 ## PR
-TBD
+https://github.com/MathieuLaureti/personnal_ai/pull/2
