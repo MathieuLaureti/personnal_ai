@@ -1,0 +1,14 @@
+node_modules/
+out/
+dist/
+release/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+.local/
+meeting-transcriber/.venv/
+meeting-transcriber/output/
+**/__pycache__/
+*.pyc
